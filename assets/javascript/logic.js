@@ -1,7 +1,7 @@
 // VARIABLES
 // ====================================================================================================================
 // Initial array of Comedic Actors
-var topics = ["Eddie Murphy", "Jim Carrey", "Jerry Seinfeld", "Kevin Hart", "Will Ferrell", "Robin Williams", "Richard Pryor", "Bill Murray", "John Belushi", "Mel Brooks", "Ben Stiller", "Steve Martin", "Chris Farley", "Seth Rogan","Steve Carell", "Chris Rock"];
+var topics = ["Eddie Murphy", "Jim Carrey", "Melissa McCarthy", "Jerry Seinfeld", "Kevin Hart", "Will Ferrell", "Amy Poehler", "Kristen Wiig", "Robin Williams", "Richard Pryor", "Bill Murray", "John Belushi", "Mel Brooks", "Ben Stiller", "Steve Martin", "Chris Farley", "Seth Rogan","Steve Carell", "Chris Rock"];
 
 
 
@@ -27,13 +27,18 @@ function renderButtons() {
         // Adding the button to the buttons-view div
         $("#buttons-view").append(actorButton);
     }
+
 }
+
+
 
 $(document).ready(function() {
     renderButtons();
+    displayGifs();
 
     // Function that re-renders the HTML to display the appropriate content
     // Event listener for all button elements
+function displayGifs() {
     $("button").on("click", function() {
         var actorName = $(this).attr("data-name");
         var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
@@ -75,7 +80,6 @@ $(document).ready(function() {
             }
             $(".gif").on("click", function () {
                 var state = $(this).attr("data-state");
-                console.log(state);
                 if (state === "still") {
                     $(this).attr("src", $(this).attr("data-animate"));
                     $(this).attr("data-state", "animate");
@@ -86,7 +90,7 @@ $(document).ready(function() {
             })
         });
     })
-
+}
 
     
     // Function creates new buttons
@@ -102,6 +106,12 @@ $(document).ready(function() {
         // Calling renderButtons which handles the processing of our topics array
         renderButtons();
         $("#actor-form").get(0).reset();
+
+        $(".actor-btn").on("click", function (){
+            //console.log("clicked");
+            displayGifs();
+            
+        })
     })
 });
 
