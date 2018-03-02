@@ -14,7 +14,7 @@ var topics = ["Eddie Murphy", "Jim Carrey", "Jerry Seinfeld", "Larry David", "Ke
 // FUNCTIONS AND MAIN PROCESS
 // ====================================================================================================================
 
-// Function to render buttons
+// Function to render initial buttons
 function renderButtons() {
     $("#buttons-view").empty();
 
@@ -78,7 +78,20 @@ $(document).ready(function() {
                 $("#gifs-appear-here").prepend(gifDiv);
             }
         });
-    }) 
-});
+    })
+    
+    // Function creates new buttons
+    $("#add-actor").on("click", function(event) {
+        event.preventDefault();
+        
+        // This line grabs the input from the textbox
+        var comedian = $("#actor-input").val().trim();
 
-//displayGifs();
+        // Adding comedian from the textbox to our array
+        topics.push(comedian);
+
+        // Calling renderButtons which handles the processing of our topics array
+        renderButtons();
+        $("#actor-form").get(0).reset();
+    })
+});
