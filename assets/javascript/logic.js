@@ -1,9 +1,7 @@
 // VARIABLES
 // ====================================================================================================================
 // Initial array of Comedic Actors
-var topics = ["Eddie Murphy", "Jim Carrey", "Jerry Seinfeld", "Larry David", "Kevin Hart", "Will Ferrell", "Robin Williams", "Richard Pryor", "Bill Murray", "John Belushi", "Mel Brooks", "Ben Stiller", "Steve Martin", "Chris Farley", "Seth Rogan","Steve Carell", "Chris Rock"];
-
-
+var topics = ["Eddie Murphy", "Jim Carrey", "Jerry Seinfeld", "Kevin Hart", "Will Ferrell", "Robin Williams", "Richard Pryor", "Bill Murray", "John Belushi", "Mel Brooks", "Ben Stiller", "Steve Martin", "Chris Farley", "Seth Rogan","Steve Carell", "Chris Rock"];
 
 
 
@@ -31,13 +29,6 @@ function renderButtons() {
     }
 }
 
-
-
-
-
-
-// MAIN PROCESS
-// ====================================================================================================================
 $(document).ready(function() {
     renderButtons();
 
@@ -69,7 +60,12 @@ $(document).ready(function() {
                 var p = $("<p>").text("Rating: " + rating);
 
                 // Creating an image tag and giving the image tag an src attribute of a proprty pulled off the result item
-                var personImage = $("<img>").attr("src", results[i].images.fixed_height_still.url);
+                var personImage = $("<img>");
+                personImage.addClass("gif");
+                personImage.attr("src", results[i].images.fixed_height_still.url);
+                personImage.attr("data-still", results[i].images.fixed_height_still.url);
+                personImage.attr("data-animate", results[i].images.fixed_height.url)
+                personImage.attr("data-state", "still");
 
                 // Appending the paragraph and personImage we created to the "gifDiv" div we created
                 gifDiv.append(p, personImage);
@@ -77,8 +73,21 @@ $(document).ready(function() {
                 // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
                 $("#gifs-appear-here").prepend(gifDiv);
             }
+            $(".gif").on("click", function () {
+                var state = $(this).attr("data-state");
+                console.log(state);
+                if (state === "still") {
+                    $(this).attr("src", $(this).attr("data-animate"));
+                    $(this).attr("data-state", "animate");
+                } else {
+                    $(this).attr("src", $(this).attr("data-still"));
+                    $(this).attr("data-state", "still");
+                }
+            })
         });
     })
+
+
     
     // Function creates new buttons
     $("#add-actor").on("click", function(event) {
@@ -95,3 +104,4 @@ $(document).ready(function() {
         $("#actor-form").get(0).reset();
     })
 });
+
