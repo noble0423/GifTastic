@@ -13,39 +13,6 @@ var topics = ["Eddie Murphy", "Jim Carrey", "Jerry Seinfeld", "Larry David", "Ke
 
 // FUNCTIONS AND MAIN PROCESS
 // ====================================================================================================================
-// Function that re-renders the HTML to display the appropriate content
-function displayGifs() {
-    var actorName = $(this).attr("data-name");
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-    actorName + "&api_key=dc6zaTOxFJmzC&limit=10";
-    // AJAX call for the specific actor button being clicked
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    }).then(function(response) {
-        
-        // Creating a div to hold the actor gif
-        var actorDiv = $("<div class = 'actor'>");
-
-        // Storing the rating data
-        var rating = response.rating;
-
-        // Creating an element in memory to have the rating displayed
-        var p = $("<p>").text("Rating: " + rating);
-
-        // Display the rating in HTML
-        actorDiv.append(p);
-
-        // Storing the URL for the still gif image
-        var imgURL = response.images.fixed_height_still.url;
-
-        // Creating an element to hold the still gif image
-        var image = $("<img>").attr("src", imgURL);
-
-        // Display still gif image in HTML
-        actorDiv.append(image);
-    });
-} 
 
 // Function to render buttons
 function renderButtons() {
@@ -59,7 +26,6 @@ function renderButtons() {
         actorButton.addClass("actor-btn");
         actorButton.attr("data-name", topics[i]);
         actorButton.text(topics[i]);
-        console.log(actorButton);
         // Adding the button to the buttons-view div
         $("#buttons-view").append(actorButton);
     }
@@ -74,6 +40,45 @@ function renderButtons() {
 // ====================================================================================================================
 $(document).ready(function() {
     renderButtons();
+
+    // Function that re-renders the HTML to display the appropriate content
+    // Event listener for all button elements
+    $("button").on("click", function() {
+        var actorName = $(this).attr("data-name");
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        actorName + "&api_key=dc6zaTOxFJmzC&limit=10";
+        // AJAX call for the specific actor button being clicked
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function(response) {
+
+            // Storing an array of results in the results variable
+            var results = response.data;
+
+            // Looping over every result item
+            for (var i = 0; i < results.length; i++) {
+        
+                // Creating a div to hold the actor gif
+                var gifDiv = $("<div class = 'item'>");
+
+                // Storing the result item's rating
+                var rating = results[i].rating;
+
+                // Creating an element in memory to have the rating displayed
+                var p = $("<p>").text("Rating: " + rating);
+
+                // Creating an image tag and giving the image tag an src attribute of a proprty pulled off the result item
+                var personImage = $("<img>").attr("src", results[i].images.fixed_height_still.url);
+
+                // Appending the paragraph and personImage we created to the "gifDiv" div we created
+                gifDiv.append(p, personImage);
+
+                // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
+                $("#gifs-appear-here").prepend(gifDiv);
+            }
+        });
+    }) 
 });
 
 //displayGifs();
